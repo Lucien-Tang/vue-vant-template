@@ -4,7 +4,7 @@
       <li
         @click="pageChange(item)"
         v-for="(item,index) in routerArr" :key="index"
-        :class="$route.name == item.router ? 'li-active' : '' "
+        :class="{'li-active': $route.name == item.router}"
       >
         <van-icon class="icon" :name="item.icon" />
         <span>{{item.name}}</span>

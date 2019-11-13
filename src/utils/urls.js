@@ -3,7 +3,7 @@ const payHost = process.env.VUE_APP_PAY_HOST;
 const frontEndHost = process.env.VUE_APP_FRONT_END_HOST;
 
 let urls = {
-  news: "/journalismApi",
+  getJoke: "/getJoke",
   music: "/musicBroadcasting",
 }
 

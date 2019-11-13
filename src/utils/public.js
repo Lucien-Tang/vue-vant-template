@@ -1,5 +1,4 @@
 
-
 // 公用函数区域
 export default {
   /**
@@ -182,15 +181,17 @@ export default {
 
     
   /**
-  * [判定是否微信浏览器]
+  * [手机端判断浏览器类型]
   * @return {Boolean} [返回布尔值]
   */
   isWechatBrowerHandle() {
-    let ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('micromessenger') != -1) {
-        return true;
-    } else {
-        return false;
+    return {
+      isAndroid: Boolean(navigator.userAgent.match(/android/ig)), //安卓
+      isIphone: Boolean(navigator.userAgent.match(/iphone|ipod/ig)),    //苹果  
+      isIpad: Boolean(navigator.userAgent.match(/ipad/ig)),      //ipad
+      isWeixin: Boolean(navigator.userAgent.match(/MicroMessenger/ig)),   //微信    
+      isAli: Boolean(navigator.userAgent.match(/AlipayClient/ig)), //支付宝
+      isPhone: Boolean(/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)), //手机端
     }
   },
 
@@ -277,12 +278,12 @@ export default {
     return t;
   },
 
-
+    
 
   /**
   * [时间格式化]
-  * @param {time} (Date || String) [需要格式化的时间值]
-  * @param {fmt} String [格式]
+  * @param {Date || String} time [需要格式化的时间值]
+  * @param {String} fmt [格式]
   * @returns {String}
   * 调用：let time = formatDate(new Date(),'yyyy/MM/dd hh:mm')
   */
@@ -311,8 +312,70 @@ export default {
   },
   padLeftZero(str) {
     return ('00' + str).substr(str.length)
+  },
+
+
+
+  /**
+  * [获取URL中的参数]
+  * @param {String} param [参数名称]
+  * @returns {String}
+  */
+  getUrlParams(param){       
+    var query = window.location.search.substring(1);       
+    var vars = query.split("&");       
+    for (var i=0;i<vars.length;i++) {               
+      var pair = vars[i].split("=");               
+      if(pair[0] == param){return pair[1];}       
+    }       
+    return(false);
+  },
+
+
+
+  /**
+  * @description 防抖函数
+  * @param {Function} fn 需要执行的函数
+  * @param {Number} wait 间隔时间
+  * @explain 连续触发时，wait时间段内没有再触发事件才会执行一次
+  */
+  debounce(fn, wait) {
+    var timeout;
+    wait = wait || 500;
+    return function () {
+      var context = this;
+      var args = arguments;
+
+      if(timeout) clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+        fn.apply(context, args);
+      },wait);
+    };
+  },
+
+
+
+  /**
+  * @description 节流函数
+  * @param {Function} fn 需要执行的函数
+  * @param {Number} wait 间隔时间
+  * @explain 连续触发时，保证wait时间段内只会触发一次
+  */
+  throttle(fn, wait) {
+    wait = wait || 500;
+    var prev = Date.now();
+    return function() {
+      var context = this;
+      var argus = arguments;
+      var now = Date.now();
+      if (now - prev >= wait) {
+        fn.apply(context, argus);
+        prev = Date.now();
+      }
+    }
   }
 
-
-
 }
+
+
